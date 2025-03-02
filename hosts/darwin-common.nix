@@ -34,5 +34,5 @@
   networking.computerName = hostname;
   system.defaults.smb.NetBIOSName = hostname;
 
-  security.pam.enableSudoTouchIdAuth = true;
+  security.pam.services.sudo_local.touchIdAuth = true;
 }
