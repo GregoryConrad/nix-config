@@ -10,6 +10,8 @@
     "flakes"
   ];
 
+  nix.gc.automatic = true;
+
   environment.shells = [ pkgs.fish ];
   programs.fish.enable = true;
 
