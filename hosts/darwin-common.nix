@@ -15,6 +15,7 @@
   environment.shells = [ pkgs.fish ];
   programs.fish.enable = true;
 
+  system.primaryUser = username;
   users.users.${username} = {
     home = "/Users/${username}";
   };
