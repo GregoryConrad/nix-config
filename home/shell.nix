@@ -23,4 +23,14 @@
     enable = true;
     nix-direnv.enable = true;
   };
+
+  programs.zoxide = {
+    enable = true;
+    enableFishIntegration = true;
+  };
+
+  programs.fzf = {
+    enable = true;
+    enableFishIntegration = true;
+  };
 }
