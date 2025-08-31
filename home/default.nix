@@ -26,11 +26,19 @@
       asciiquarium
     ];
 
-    file = {
-      ".config/background.jpg".source = ./background.jpg;
-      ".config/wezterm".source = ./wezterm;
-      ".config/wezterm".recursive = true;
-    };
+    file =
+      let
+        # NOTE: this injects the helix executable's path into the wezterm scrollback script
+        helixBinPath = "${pkgs.helix}/bin/hx";
+        scrollbackLua = builtins.replaceStrings [ "__HELIX_BIN_PATH__" ] [ helixBinPath ] (
+          builtins.readFile ./wezterm/scrollback.lua
+        );
+      in
+      {
+        ".config/background.jpg".source = ./background.jpg;
+        ".config/wezterm/wezterm.lua".source = ./wezterm/wezterm.lua;
+        ".config/wezterm/scrollback.lua".text = scrollbackLua;
+      };
   };
 
   # Let Home Manager install and manage itself.
