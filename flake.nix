@@ -32,7 +32,7 @@
       };
     in
     {
-      formatter = forAllSystems (pkgs: pkgs.nixfmt-rfc-style);
+      formatter = forAllSystems (pkgs: pkgs.nixfmt-tree);
 
       # sudo nixos-rebuild switch --flake .#nixos-server
       nixosConfigurations.nixos-server =
