@@ -80,7 +80,10 @@
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.extraSpecialArgs = specialArgs;
-              home-manager.users.${username} = import ./home;
+              home-manager.users.${username} = nixpkgs.lib.mkMerge [
+                (import ./home)
+                (import ./home/personal.nix)
+              ];
             }
           ];
         };
