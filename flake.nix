@@ -27,8 +27,10 @@
 
       # NOTE: used by ./home/git.nix
       git = {
-        userName = "Gregory Conrad";
-        userEmail = "gregorysconrad@gmail.com";
+        settings = {
+          user.name = "Gregory Conrad";
+          user.email = "gregorysconrad@gmail.com";
+        };
       };
     in
     {
