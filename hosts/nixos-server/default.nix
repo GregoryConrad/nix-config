@@ -40,6 +40,12 @@
     useRoutingFeatures = "both";
   };
 
+  services.immich = {
+    enable = true;
+    host = "0.0.0.0";
+    openFirewall = true;
+  };
+
   services.openssh = {
     enable = true;
     settings.PasswordAuthentication = false;
