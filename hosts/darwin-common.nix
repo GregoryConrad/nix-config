@@ -11,6 +11,7 @@
   ];
 
   nix.gc.automatic = true;
+  nix.linux-builder.enable = true;
 
   environment.shells = [ pkgs.fish ];
   programs.fish.enable = true;
