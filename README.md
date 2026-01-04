@@ -3,29 +3,40 @@
 > Formerly my `dotfiles` repo.
 > I went all-in on nix and absolutely love it; [you should too](https://zero-to-nix.com/)!
 
-
 ## Overview
 This repo is managed at the top level via `flake.nix`, which defines configuration for:
 - My personal MacBook Pro
 - My work MacBook Pro (requires a special `work-extras.nix`)
-- An old PC I have lying around that I refuse to recycle (I'll find a use for it some day...)
+- `optimus`, an old Optiplex 9020 that I picked up some years ago
+- `rpi4`, a Raspberry Pi 4
 
 The two MBPs are configured via [nix-darwin].
 Since I'm bound to forget how to set that up on a new machine, here's the TL;DR:
 ```zsh
 # Install nix
-# SAY NO WHEN PROMPTED IF YOU WANT THE DETERMINATE FLAVOR OF NIX!
-curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
+# TODO use (almost no longer) experimental nix installer
 
 # Setup for nix-darwin
 sudo mkdir -p /etc/nix-darwin
 sudo chown $(id -nu):$(id -ng) /etc/nix-darwin
 cd /etc/nix-darwin
 git clone git@github.com:GregoryConrad/nix-config.git .
-nix run nix-darwin/master#darwin-rebuild -- switch --flake .#HOSTNAME-GOES-HERE
-# NOTE: you can run `darwin-rebuild switch` after the above is run for the first time
+sudo nix run nix-darwin/master#darwin-rebuild -- switch --flake .#HOSTNAME-GOES-HERE
+# NOTE: you can run `sudo darwin-rebuild switch` after the above is run for the first time
 ```
 
+### Building and Deploying
+```bash
+# Rebuild local system
+sudo nixos-rebuild switch --flake .#HOSTNAME
+sudo darwin-rebuild switch --flake .#HOSTNAME # --impure if needed
+
+# Deploy to hosts (via ./deploy.nix)
+nix run github:serokell/deploy-rs -- . -- --impure # --impure needed for builtins.currentSystem
+
+# Create Raspberry Pi SD card image
+nix build .#images.rpi4
+```
 
 ## Tech I Use
 - Nix (obviously)

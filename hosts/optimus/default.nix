@@ -1,7 +1,6 @@
 {
   pkgs,
   username,
-  hostname,
   ...
 }:
 {
@@ -9,50 +8,14 @@
     ./hardware-configuration.nix
   ];
 
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
-
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-  };
-
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-
-  networking.hostName = hostname;
-  networking.networkmanager.enable = true;
-  networking.firewall.allowedTCPPorts = [ 22 ];
-
-  # Tailscale
-  boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
-  boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = 1;
-  networking.search = [ "tail36d0f.ts.net" ];
-  networking.nameservers = [
-    "100.100.100.100"
-    "8.8.8.8"
-    "1.1.1.1"
-  ];
-  services.tailscale = {
-    enable = true;
-    useRoutingFeatures = "both";
-  };
 
   services.immich = {
     enable = true;
     host = "0.0.0.0";
     openFirewall = true;
   };
-
-  services.openssh = {
-    enable = true;
-    settings.PasswordAuthentication = false;
-    settings.KbdInteractiveAuthentication = false;
-  };
-
-  security.sudo.wheelNeedsPassword = false;
 
   time.timeZone = "America/New_York";
   i18n.defaultLocale = "en_US.UTF-8";
@@ -67,9 +30,6 @@
     LC_TELEPHONE = "en_US.UTF-8";
     LC_TIME = "en_US.UTF-8";
   };
-
-  nixpkgs.config.allowUnfree = true;
-  programs.fish.enable = true;
 
   users.users.${username} = {
     isNormalUser = true;

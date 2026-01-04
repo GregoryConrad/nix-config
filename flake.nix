@@ -3,10 +3,12 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nix-darwin.url = "github:LnL7/nix-darwin/master";
+    nix-darwin.url = "github:nix-darwin/nix-darwin/master";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    deploy-rs.url = "github:serokell/deploy-rs";
+    deploy-rs.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
@@ -15,13 +17,13 @@
       nixpkgs,
       nix-darwin,
       home-manager,
+      deploy-rs,
     }:
     let
       systems = [
-        "x86_64-linux"
-        "aarch64-linux"
-        "x86_64-darwin"
         "aarch64-darwin"
+        "aarch64-linux"
+        "x86_64-linux"
       ];
       forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f nixpkgs.legacyPackages.${system});
 
@@ -32,91 +34,100 @@
           user.email = "gregorysconrad@gmail.com";
         };
       };
+
+      mkHomeManagerModule = specialArgs: homeManagerModules: {
+        home-manager.useGlobalPkgs = true;
+        home-manager.useUserPackages = true;
+        home-manager.extraSpecialArgs = specialArgs // {
+          inherit git;
+        };
+        home-manager.users.${specialArgs.username} = nixpkgs.lib.mkMerge homeManagerModules;
+      };
     in
     {
       formatter = forAllSystems (pkgs: pkgs.nixfmt-tree);
+      deploy = import ./deploy.nix inputs;
 
-      # sudo nixos-rebuild switch --flake .#nixos-server
-      nixosConfigurations.nixos-server =
-        let
-          username = "gconrad";
-          hostname = "nixos-server";
-          specialArgs = inputs // {
-            inherit username hostname git;
-          };
-        in
-        nixpkgs.lib.nixosSystem {
-          inherit specialArgs;
-          system = "x86_64-linux";
-          modules = [
-            ./hosts/nixos-server
-
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.extraSpecialArgs = specialArgs;
-              home-manager.users.${username} = import ./home;
-            }
-          ];
-        };
-
-      # darwin-rebuild switch --flake .#Groog-MBP
       darwinConfigurations.Groog-MBP =
         let
           username = "gconrad";
           hostname = "Groog-MBP";
           specialArgs = inputs // {
-            inherit username hostname git;
+            inherit username hostname;
           };
         in
         nix-darwin.lib.darwinSystem {
           inherit specialArgs;
-          system = "aarch64-darwin";
           modules = [
-            ./hosts/darwin-common.nix
+            ./hosts/modules/darwin-common.nix
             ./hosts/Groog-MBP.nix
-
             home-manager.darwinModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.extraSpecialArgs = specialArgs;
-              home-manager.users.${username} = nixpkgs.lib.mkMerge [
-                (import ./home)
-                (import ./home/personal.nix)
-              ];
-            }
+            (mkHomeManagerModule specialArgs [
+              (import ./home)
+              (import ./home/personal.nix)
+            ])
           ];
         };
 
-      # darwin-rebuild switch --flake .#Greg-Work-MBP --impure
       darwinConfigurations.Greg-Work-MBP =
         let
           username = "gsconrad";
           hostname = "Greg-Work-MBP";
           specialArgs = inputs // {
-            inherit username hostname git;
+            inherit username hostname;
           };
           workExtrasPath = "/Volumes/workplace/work-extras.nix";
         in
         nix-darwin.lib.darwinSystem {
           inherit specialArgs;
-          system = "aarch64-darwin";
           modules = [
-            ./hosts/darwin-common.nix
+            ./hosts/modules/darwin-common.nix
             ./hosts/Greg-Work-MBP.nix
-
             home-manager.darwinModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.extraSpecialArgs = specialArgs;
-              home-manager.users.${username} = nixpkgs.lib.mkMerge [
-                (import ./home)
-                (if builtins.pathExists workExtrasPath then import workExtrasPath else { })
-              ];
-            }
+            (mkHomeManagerModule specialArgs [
+              (import ./home)
+              # NOTE: this out-of-repo import is what requires impure.
+              # Frankly too much effort to do this a "proper" way, like:
+              # - A private git repo, that is added as a git submodule
+              # - Via secret management (never looked into this enough)
+              (if builtins.pathExists workExtrasPath then import workExtrasPath else { })
+            ])
+          ];
+        };
+
+      nixosConfigurations.optimus =
+        let
+          username = "gconrad";
+          hostname = "optimus";
+          specialArgs = inputs // {
+            inherit username hostname;
+          };
+        in
+        nixpkgs.lib.nixosSystem {
+          inherit specialArgs;
+          modules = [
+            ./hosts/modules/nixos-common.nix
+            ./hosts/modules/management.nix
+            ./hosts/optimus
+            home-manager.nixosModules.home-manager
+            (mkHomeManagerModule specialArgs [ (import ./home) ])
+          ];
+        };
+
+      images.rpi4 = self.nixosConfigurations.rpi4.config.system.build.sdImage;
+      nixosConfigurations.rpi4 =
+        let
+          hostname = "rpi4";
+          specialArgs = inputs // {
+            inherit hostname;
+          };
+        in
+        nixpkgs.lib.nixosSystem {
+          inherit specialArgs;
+          modules = [
+            ./hosts/modules/nixos-common.nix
+            ./hosts/modules/management.nix
+            ./hosts/rpi4
           ];
         };
     };
