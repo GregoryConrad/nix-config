@@ -5,7 +5,6 @@
   system.stateVersion = 6;
 
   homebrew.casks = [
-    "amazon-q"
     "zoom"
   ];
 }
