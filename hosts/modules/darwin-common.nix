@@ -10,6 +10,8 @@
     "flakes"
   ];
 
+  nixpkgs.hostPlatform = "aarch64-darwin";
+
   nix.gc.automatic = true;
   nix.linux-builder.enable = true;
 
