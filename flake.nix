@@ -71,12 +71,12 @@
 
       darwinConfigurations.Greg-Work-MBP =
         let
-          username = "gsconrad";
+          username = "greg";
           hostname = "Greg-Work-MBP";
           specialArgs = inputs // {
             inherit username hostname;
           };
-          workExtrasPath = "/Volumes/workplace/work-extras.nix";
+          workExtrasPath = "/Users/greg/Documents/work-darwin-config.nix";
         in
         nix-darwin.lib.darwinSystem {
           inherit specialArgs;
@@ -84,14 +84,13 @@
             ./hosts/modules/darwin-common.nix
             ./hosts/Greg-Work-MBP.nix
             home-manager.darwinModules.home-manager
-            (mkHomeManagerModule specialArgs [
-              (import ./home)
-              # NOTE: this out-of-repo import is what requires impure.
-              # Frankly too much effort to do this a "proper" way, like:
-              # - A private git repo, that is added as a git submodule
-              # - Via secret management (never looked into this enough)
-              (if builtins.pathExists workExtrasPath then import workExtrasPath else { })
-            ])
+            (mkHomeManagerModule specialArgs [ (import ./home) ])
+
+            # NOTE: this out-of-repo import is what requires impure.
+            # Frankly too much effort to do this a "proper" way, like:
+            # - A private git repo, that is added as a git submodule
+            # - Via secret management (never looked into this enough)
+            (if builtins.pathExists workExtrasPath then import workExtrasPath else { })
           ];
         };
 

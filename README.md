@@ -11,19 +11,6 @@ This repo is managed at the top level via `flake.nix`, which defines configurati
 - `rpi4`, a Raspberry Pi 4
 
 The two MBPs are configured via [nix-darwin].
-Since I'm bound to forget how to set that up on a new machine, here's the TL;DR:
-```zsh
-# Install nix
-# TODO use (almost no longer) experimental nix installer
-
-# Setup for nix-darwin
-sudo mkdir -p /etc/nix-darwin
-sudo chown $(id -nu):$(id -ng) /etc/nix-darwin
-cd /etc/nix-darwin
-git clone git@github.com:GregoryConrad/nix-config.git .
-sudo nix run nix-darwin/master#darwin-rebuild -- switch --flake .#HOSTNAME-GOES-HERE
-# NOTE: you can run `sudo darwin-rebuild switch` after the above is run for the first time
-```
 
 ### Building and Deploying
 ```bash
@@ -36,6 +23,20 @@ nix run github:serokell/deploy-rs -- . -- --impure # --impure needed for builtin
 
 # Create Raspberry Pi SD card image
 nix build .#images.rpi4
+```
+
+Since I'm bound to forget how to set everything up on macOS, here's the TL;DR:
+```zsh
+# Install nix
+# TODO these instructions are apt to change soon, just see the latest here:
+# https://github.com/NixOS/nix-installer
+
+# Setup for nix-darwin
+sudo mkdir -p /etc/nix-darwin
+sudo chown $(id -nu):$(id -ng) /etc/nix-darwin
+cd /etc/nix-darwin
+git clone git@github.com:GregoryConrad/nix-config.git .
+sudo nix run nix-darwin/master#darwin-rebuild -- switch --flake .#HOSTNAME-GOES-HERE
 ```
 
 ## Tech I Use
