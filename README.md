@@ -18,8 +18,8 @@ The two MBPs are configured via [nix-darwin].
 sudo nixos-rebuild switch --flake .#HOSTNAME
 sudo darwin-rebuild switch --flake .#HOSTNAME # --impure if needed
 
-# Deploy to hosts (via ./deploy.nix)
-nix run github:serokell/deploy-rs -- . -- --impure # --impure needed for builtins.currentSystem
+# Deploy to hosts (via ./deploy/default.nix)
+nix run .#deploy-rs -- . -- --impure # --impure needed for builtins.currentSystem
 
 # Create Raspberry Pi SD card image
 nix build .#images.rpi4

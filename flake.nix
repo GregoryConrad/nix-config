@@ -25,7 +25,7 @@
         "aarch64-linux"
         "x86_64-linux"
       ];
-      forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f nixpkgs.legacyPackages.${system});
+      mkFlakeOutput = f: nixpkgs.lib.genAttrs systems f;
 
       # NOTE: used by ./home/git.nix
       git = {
@@ -45,8 +45,11 @@
       };
     in
     {
-      formatter = forAllSystems (pkgs: pkgs.nixfmt-tree);
-      deploy = import ./deploy.nix inputs;
+      formatter = mkFlakeOutput (system: nixpkgs.legacyPackages.${system}.nixfmt-tree);
+      apps = mkFlakeOutput (system: {
+        deploy-rs = deploy-rs.apps.${system}.deploy-rs;
+      });
+      deploy = import ./deploy inputs;
 
       darwinConfigurations.Groog-MBP =
         let
@@ -116,9 +119,10 @@
       images.rpi4 = self.nixosConfigurations.rpi4.config.system.build.sdImage;
       nixosConfigurations.rpi4 =
         let
+          username = "gconrad";
           hostname = "rpi4";
           specialArgs = inputs // {
-            inherit hostname;
+            inherit username hostname;
           };
         in
         nixpkgs.lib.nixosSystem {

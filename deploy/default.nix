@@ -22,7 +22,7 @@ let
 in
 {
   user = "root";
-  sshUser = "deploy"; # NOTE: this is the "deploy" user from ./hosts/modules/management.nix
+  sshUser = "deploy"; # NOTE: this is the "deploy" user from /hosts/modules/management.nix
   nodes = {
     optimus = mkNode "optimus" "x86_64-linux";
     rpi4 = mkNode "rpi4" "aarch64-linux";

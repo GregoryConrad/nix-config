@@ -36,19 +36,10 @@
     description = username;
     shell = pkgs.fish;
     extraGroups = [
-      "networkmanager"
       "wheel"
+      "networkmanager"
     ];
-
-    openssh.authorizedKeys.keyFiles =
-      let
-        githubKeys = pkgs.fetchurl {
-          url = "https://github.com/GregoryConrad.keys";
-          # nix-prefetch-url https://github.com/GregoryConrad.keys
-          sha256 = "0wpz9hrnp8pypqn3wn6siiwba3m056s7mdszjk4x1vjmc0zx9gan";
-        };
-      in
-      [ githubKeys ];
+    openssh.authorizedKeys.keyFiles = [ ../../deploy/authorized_keys.pub ];
   };
 
   # This value determines the NixOS release from which the default

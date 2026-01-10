@@ -1,4 +1,9 @@
-{ nixpkgs, ... }:
+{
+  pkgs,
+  nixpkgs,
+  username,
+  ...
+}:
 {
   imports = [
     "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
@@ -7,6 +12,17 @@
   nixpkgs.hostPlatform = "aarch64-linux";
 
   time.timeZone = "America/New_York";
+
+  users.users.${username} = {
+    isNormalUser = true;
+    description = username;
+    shell = pkgs.fish;
+    extraGroups = [
+      "wheel"
+      "networkmanager"
+    ];
+    openssh.authorizedKeys.keyFiles = [ ../../deploy/authorized_keys.pub ];
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
