@@ -1,0 +1,36 @@
+name: Deploy Machine Configurations
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-24.04-arm # NOTE: to build aarch64 locally
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v5
+      - uses: cachix/install-nix-action@v31
+        with:
+          # NOTE: hack fix for https://github.com/serokell/deploy-rs/issues/355
+          install_url: https://releases.nixos.org/nix/nix-2.32.4/install
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - uses: tailscale/github-action@v4
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+          ping: optimus,rpi4
+      - name: SSH setup
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+
+          ssh-keyscan -H optimus rpi4 >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+      - run: nix run .#deploy-rs -- . -- --impure
