@@ -8,7 +8,7 @@ This repo is managed at the top level via `flake.nix`, which defines configurati
 - My personal MacBook Pro
 - My work MacBook Pro (requires a special `work-extras.nix`)
 - `optimus`, an old Optiplex 9020 that I picked up some years ago
-- `rpi4`, a Raspberry Pi 4
+- `rpi4`, a Raspberry Pi 4 Model B
 
 The two MBPs are configured via [nix-darwin].
 
