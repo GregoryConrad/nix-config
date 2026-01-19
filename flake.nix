@@ -9,6 +9,8 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     deploy-rs.url = "github:serokell/deploy-rs";
     deploy-rs.inputs.nixpkgs.follows = "nixpkgs";
+    sops-nix.url = "github:Mic92/sops-nix";
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
@@ -18,6 +20,7 @@
       nix-darwin,
       home-manager,
       deploy-rs,
+      sops-nix,
     }:
     let
       systems = [
@@ -50,6 +53,25 @@
         deploy-rs = deploy-rs.apps.${system}.deploy-rs;
       });
       deploy = import ./deploy inputs;
+      devShells = mkFlakeOutput (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        {
+          default = pkgs.mkShell {
+            packages = with pkgs; [
+              sops
+              ssh-to-age
+              helm-ls
+            ];
+
+            shellHook = ''
+              export SOPS_AGE_KEY="$(ssh-to-age -private-key -i ~/.ssh/id_ed25519)"
+            '';
+          };
+        }
+      );
 
       darwinConfigurations.Groog-MBP =
         let
@@ -110,6 +132,7 @@
           modules = [
             ./hosts/modules/nixos-common.nix
             ./hosts/modules/management.nix
+            ./hosts/modules/k8s/leader.nix
             ./hosts/optimus
             home-manager.nixosModules.home-manager
             (mkHomeManagerModule specialArgs [ (import ./home) ])

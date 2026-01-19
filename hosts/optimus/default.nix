@@ -1,15 +1,19 @@
 {
   pkgs,
   username,
+  sops-nix,
   ...
 }:
 {
   imports = [
     ./hardware-configuration.nix
+    sops-nix.nixosModules.sops
   ];
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+
+  sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
 
   services.immich = {
     enable = true;

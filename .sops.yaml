@@ -1,0 +1,9 @@
+keys:
+  - &personal-mbp age1f36mqstu7qyy29l36jwfdc6zqfxa6a3x543ly8025wk74gnstehqa7zdp8
+  - &optimus age10w6h0zkf6wxu8pgjpgct45syuxh642t7u6xw6fkv284tdamn0asspjy2tz
+creation_rules:
+  - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
+    key_groups:
+    - age:
+      - *personal-mbp
+      - *optimus
