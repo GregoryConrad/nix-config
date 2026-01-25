@@ -1,35 +1,20 @@
 {
   pkgs,
   username,
+  nixos-raspberrypi,
   ...
 }:
 {
-  imports = [
-    ./hardware-configuration.nix
+  imports = with nixos-raspberrypi.nixosModules; [
+    raspberry-pi-5.base
+    raspberry-pi-5.display-vc4
+    raspberry-pi-5.page-size-16k
+    # ./nvme.nix # TODO do we need this?
   ];
 
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
-  services.immich = {
-    enable = true;
-    host = "0.0.0.0";
-    openFirewall = true;
-  };
+  boot.loader.raspberry-pi.bootloader = "kernel";
 
   time.timeZone = "America/New_York";
-  i18n.defaultLocale = "en_US.UTF-8";
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_US.UTF-8";
-    LC_IDENTIFICATION = "en_US.UTF-8";
-    LC_MEASUREMENT = "en_US.UTF-8";
-    LC_MONETARY = "en_US.UTF-8";
-    LC_NAME = "en_US.UTF-8";
-    LC_NUMERIC = "en_US.UTF-8";
-    LC_PAPER = "en_US.UTF-8";
-    LC_TELEPHONE = "en_US.UTF-8";
-    LC_TIME = "en_US.UTF-8";
-  };
 
   users.users.${username} = {
     isNormalUser = true;
@@ -48,5 +33,5 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "24.05";
+  system.stateVersion = "26.05";
 }

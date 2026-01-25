@@ -1,15 +1,14 @@
 {
   pkgs,
-  nixpkgs,
   username,
+  nixos-raspberrypi,
   ...
 }:
 {
-  imports = [
-    "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
+  imports = with nixos-raspberrypi.nixosModules; [
+    raspberry-pi-4.base
+    raspberry-pi-4.display-vc4
   ];
-
-  nixpkgs.hostPlatform = "aarch64-linux";
 
   time.timeZone = "America/New_York";
 

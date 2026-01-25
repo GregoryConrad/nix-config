@@ -4,10 +4,8 @@ metadata:
   name: {{ .Values.immich.library.pvc.name }}
 spec:
   accessModes:
-    # - ReadWriteMany # TODO switch to ceph-filesystem here and below
     - ReadWriteOnce
   storageClassName: ceph-block
-  # TODO set keep retention policy / whatever so data isn't eaten in case of screw up
   resources:
     requests:
-      storage: 10Gi
+      storage: {{ .Values.immich.library.pvc.size }}
