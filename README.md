@@ -27,12 +27,9 @@ nix build .#images.HOSTNAME
 ```
 
 Since I'm bound to forget how to set everything up on macOS, here's the TL;DR:
+1. Install Nix via https://github.com/NixOS/nix-installer
+2. Setup nix-darwin:
 ```zsh
-# Install nix
-# TODO these instructions are apt to change soon, just see the latest here:
-# https://github.com/NixOS/nix-installer
-
-# Setup for nix-darwin
 sudo mkdir -p /etc/nix-darwin
 sudo chown $(id -nu):$(id -ng) /etc/nix-darwin
 cd /etc/nix-darwin
