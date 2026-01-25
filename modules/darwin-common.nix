@@ -14,6 +14,7 @@
 
   nix.gc.automatic = true;
   nix.linux-builder.enable = true;
+  nix.linux-builder.config.virtualisation.cores = 8;
 
   environment.shells = [ pkgs.fish ];
   programs.fish.enable = true;
