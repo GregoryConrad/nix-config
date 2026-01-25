@@ -6,9 +6,13 @@
 }:
 {
   imports = with nixos-raspberrypi.nixosModules; [
-    raspberry-pi-4.base
-    raspberry-pi-4.display-vc4
+    raspberry-pi-5.base
+    raspberry-pi-5.display-vc4
+    raspberry-pi-5.page-size-16k
+    # ./nvme.nix # TODO do we need this?
   ];
+
+  boot.loader.raspberry-pi.bootloader = "kernel";
 
   time.timeZone = "America/New_York";
 

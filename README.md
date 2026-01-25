@@ -9,6 +9,7 @@ This repo is managed at the top level via `flake.nix`, which defines configurati
 - My work MacBook Pro (requires a special `work-extras.nix`)
 - `optimus`, an old Optiplex 9020 that I picked up some years ago
 - `rpi4`, a Raspberry Pi 4 Model B
+- `rpi5`, a Raspberry Pi 5
 
 The two MBPs are configured via [nix-darwin].
 
@@ -19,10 +20,10 @@ sudo nixos-rebuild switch --flake .#HOSTNAME
 sudo darwin-rebuild switch --flake .#HOSTNAME # --impure if needed
 
 # Deploy to hosts (via ./deploy/default.nix)
-nix run .#deploy-rs -- . -- --impure # --impure needed for builtins.currentSystem
+nix run .#deploy-rs -- .#HOSTNAME
 
 # Create Raspberry Pi SD card image
-nix build .#images.rpi4
+nix build .#images.HOSTNAME
 ```
 
 Since I'm bound to forget how to set everything up on macOS, here's the TL;DR:
@@ -36,7 +37,7 @@ sudo mkdir -p /etc/nix-darwin
 sudo chown $(id -nu):$(id -ng) /etc/nix-darwin
 cd /etc/nix-darwin
 git clone git@github.com:GregoryConrad/nix-config.git .
-sudo nix run nix-darwin/master#darwin-rebuild -- switch --flake .#HOSTNAME-GOES-HERE
+sudo nix run nix-darwin/master#darwin-rebuild -- switch --flake .#HOSTNAME
 ```
 
 ## Tech I Use

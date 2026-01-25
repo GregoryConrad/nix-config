@@ -9,6 +9,12 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     deploy-rs.url = "github:serokell/deploy-rs";
     deploy-rs.inputs.nixpkgs.follows = "nixpkgs";
+    sops-nix.url = "github:Mic92/sops-nix";
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs";
+    # TODO once https://github.com/nvmd/nixos-raspberrypi/pull/131 is merged:
+    # nixos-raspberrypi.url = "github:nvmd/nixos-raspberrypi/main";
+    nixos-raspberrypi.url = "github:nvmd/nixos-raspberrypi/remove-options-compat";
+    nixos-raspberrypi.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
@@ -18,6 +24,8 @@
       nix-darwin,
       home-manager,
       deploy-rs,
+      sops-nix,
+      nixos-raspberrypi,
     }:
     let
       systems = [
@@ -50,6 +58,25 @@
         deploy-rs = deploy-rs.apps.${system}.deploy-rs;
       });
       deploy = import ./deploy inputs;
+      devShells = mkFlakeOutput (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        {
+          default = pkgs.mkShell {
+            packages = with pkgs; [
+              sops
+              ssh-to-age
+              helm-ls
+            ];
+
+            shellHook = ''
+              export SOPS_AGE_KEY="$(ssh-to-age -private-key -i ~/.ssh/id_ed25519)"
+            '';
+          };
+        }
+      );
 
       darwinConfigurations.Groog-MBP =
         let
@@ -101,18 +128,48 @@
         let
           username = "gconrad";
           hostname = "optimus";
+          k3sConfig = {
+            nodeIP = "100.64.0.1";
+          };
           specialArgs = inputs // {
-            inherit username hostname;
+            inherit username hostname k3sConfig;
           };
         in
         nixpkgs.lib.nixosSystem {
           inherit specialArgs;
           modules = [
+            sops-nix.nixosModules.sops
             ./hosts/modules/nixos-common.nix
             ./hosts/modules/management.nix
+            ./hosts/modules/k8s/common.nix
+            ./hosts/modules/k8s/leader.nix
             ./hosts/optimus
             home-manager.nixosModules.home-manager
             (mkHomeManagerModule specialArgs [ (import ./home) ])
+          ];
+        };
+
+      images.rpi5 = self.nixosConfigurations.rpi5.config.system.build.sdImage;
+      nixosConfigurations.rpi5 =
+        let
+          username = "gconrad";
+          hostname = "rpi5";
+          k3sConfig = {
+            nodeIP = "100.64.0.2";
+            serverAddr = "https://100.64.0.1:6443";
+          };
+          specialArgs = inputs // {
+            inherit username hostname k3sConfig;
+          };
+        in
+        nixos-raspberrypi.lib.nixosInstaller {
+          inherit specialArgs;
+          modules = [
+            sops-nix.nixosModules.sops
+            ./hosts/modules/nixos-common.nix
+            ./hosts/modules/management.nix
+            ./hosts/modules/k8s/common.nix
+            ./hosts/rpi5
           ];
         };
 
@@ -121,15 +178,21 @@
         let
           username = "gconrad";
           hostname = "rpi4";
+          k3sConfig = {
+            nodeIP = "100.64.0.3";
+            serverAddr = "https://100.64.0.1:6443";
+          };
           specialArgs = inputs // {
-            inherit username hostname;
+            inherit username hostname k3sConfig;
           };
         in
-        nixpkgs.lib.nixosSystem {
+        nixos-raspberrypi.lib.nixosInstaller {
           inherit specialArgs;
           modules = [
+            sops-nix.nixosModules.sops
             ./hosts/modules/nixos-common.nix
             ./hosts/modules/management.nix
+            ./hosts/modules/k8s/common.nix
             ./hosts/rpi4
           ];
         };
