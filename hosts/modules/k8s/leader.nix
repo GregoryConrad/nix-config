@@ -194,16 +194,6 @@ in
           };
         };
       };
-      # TODO remove this, and the helm chart stuff itself, if the manifest we added works
-      # immich-deps = {
-      #   package = pkgs.callPackage ./helm-chart.nix { chartDir = ./charts/immich-deps; };
-      #   targetNamespace = "immich";
-      #   createNamespace = true;
-      #   values = {
-      #     immich.library.pvc.name = immichLibraryPvcName;
-      #     immich.library.pvc.size = immichLibraryPvcSize;
-      #   };
-      # };
       immich = {
         # https://github.com/immich-app/immich-charts
         name = "immich";
@@ -247,7 +237,7 @@ in
       };
     };
 
-    manifests.immich-deps.content = {
+    manifests.immich-pvc.content = {
       apiVersion = "v1";
       kind = "PersistentVolumeClaim";
       metadata = {
