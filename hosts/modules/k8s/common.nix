@@ -9,9 +9,6 @@
 
   environment.systemPackages = [ pkgs.k9s ];
 
-  # TODO do we need this, or is it default?
-  # sops.age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
-
   # TODO change these if config.services.k3s.role is "agent"!
   networking.firewall.allowedTCPPorts = [
     6443 # k3s: required so that pods can reach the API server (running on port 6443 by default)
@@ -46,7 +43,7 @@
   services.k3s = k3sConfig // {
     enable = true;
     disable = [ "local-storage" ]; # we are using Rook/Ceph instead
-    # tokenFile = config.sops.secrets.k3sToken.path; # TODO
+    tokenFile = config.sops.secrets.k3sToken.path;
 
     # TODO do we need any of these?
     # extraFlags = [
