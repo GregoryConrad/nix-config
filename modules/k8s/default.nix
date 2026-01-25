@@ -36,7 +36,7 @@
 
   # WARN: make sure all k3s nodes have access to this secret in sops!
   sops.secrets.k3sToken = {
-    sopsFile = ../../../secrets/k3s.yaml;
+    sopsFile = ../../secrets/k3s.yaml;
     key = "token";
   };
 

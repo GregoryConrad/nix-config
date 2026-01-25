@@ -254,7 +254,7 @@ in
 
   # WARN: make sure the node assigned to be the leader has access to this secret!
   sops.secrets.tailscale-oauth = {
-    sopsFile = ../../../secrets/tailscale-oauth.env;
+    sopsFile = ../../secrets/tailscale-oauth.env;
     format = "dotenv";
   };
 

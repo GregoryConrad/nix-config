@@ -28,6 +28,6 @@
     isNormalUser = true;
     description = "User for deploy-rs SSH access";
     extraGroups = [ "wheel" ];
-    openssh.authorizedKeys.keyFiles = [ ../../deploy/authorized_keys.pub ];
+    openssh.authorizedKeys.keyFiles = [ ../deploy/authorized_keys.pub ];
   };
 }

@@ -89,7 +89,7 @@
         nix-darwin.lib.darwinSystem {
           inherit specialArgs;
           modules = [
-            ./hosts/modules/darwin-common.nix
+            ./modules/darwin-common.nix
             ./hosts/Groog-MBP.nix
             home-manager.darwinModules.home-manager
             (mkHomeManagerModule specialArgs [
@@ -111,7 +111,7 @@
         nix-darwin.lib.darwinSystem {
           inherit specialArgs;
           modules = [
-            ./hosts/modules/darwin-common.nix
+            ./modules/darwin-common.nix
             ./hosts/Greg-Work-MBP.nix
             home-manager.darwinModules.home-manager
             (mkHomeManagerModule specialArgs [ (import ./home) ])
@@ -139,10 +139,10 @@
           inherit specialArgs;
           modules = [
             sops-nix.nixosModules.sops
-            ./hosts/modules/nixos-common.nix
-            ./hosts/modules/management.nix
-            ./hosts/modules/k8s/common.nix
-            ./hosts/modules/k8s/leader.nix
+            ./modules/nixos-common.nix
+            ./modules/management.nix
+            ./modules/k8s
+            ./modules/k8s/leader.nix
             ./hosts/optimus
             home-manager.nixosModules.home-manager
             (mkHomeManagerModule specialArgs [ (import ./home) ])
@@ -166,9 +166,9 @@
           inherit specialArgs;
           modules = [
             sops-nix.nixosModules.sops
-            ./hosts/modules/nixos-common.nix
-            ./hosts/modules/management.nix
-            ./hosts/modules/k8s/common.nix
+            ./modules/nixos-common.nix
+            ./modules/management.nix
+            ./modules/k8s
             ./hosts/rpi5
           ];
         };
@@ -190,9 +190,9 @@
           inherit specialArgs;
           modules = [
             sops-nix.nixosModules.sops
-            ./hosts/modules/nixos-common.nix
-            ./hosts/modules/management.nix
-            ./hosts/modules/k8s/common.nix
+            ./modules/nixos-common.nix
+            ./modules/management.nix
+            ./modules/k8s
             ./hosts/rpi4
           ];
         };
