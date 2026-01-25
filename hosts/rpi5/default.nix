@@ -12,6 +12,12 @@
     # ./nvme.nix # TODO do we need this?
   ];
 
+  # For https://github.com/k3s-io/k3s/issues/2067
+  boot.kernelParams = [
+    "cgroup_enable=cpuset"
+    "cgroup_enable=memory"
+  ];
+
   boot.loader.raspberry-pi.bootloader = "kernel";
 
   time.timeZone = "America/New_York";

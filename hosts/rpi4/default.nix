@@ -10,6 +10,12 @@
     raspberry-pi-4.display-vc4
   ];
 
+  # For https://github.com/k3s-io/k3s/issues/2067
+  boot.kernelParams = [
+    "cgroup_enable=cpuset"
+    "cgroup_enable=memory"
+  ];
+
   time.timeZone = "America/New_York";
 
   users.users.${username} = {
