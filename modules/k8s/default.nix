@@ -41,16 +41,14 @@
   };
 
   services.k3s = k3sConfig // {
-    enable = true;
+    enable = false; # TODO re-enable later once we sort disks out
     disable = [ "local-storage" ]; # we are using Rook/Ceph instead
     tokenFile = config.sops.secrets.k3sToken.path;
 
-    # TODO do we need any of these?
+    # TODO do we need these?
     # extraFlags = [
-    # NOTE: we need to use eth1 since we are in an integration test, where:
-    # - eth0 is reserved for the NixOS test driver
-    # - eth1 is reserved for inter-node communication
-    # "--flannel-iface eth1"
+    #   "--etcd-arg --election-timeout=5000" # default is 1000ms
+    #   "--etcd-arg --heartbeat-interval=500" # default is 100ms
     # ];
   };
 }
