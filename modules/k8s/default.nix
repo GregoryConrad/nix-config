@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   pkgs,
   k3sConfig,
   ...
@@ -9,8 +10,7 @@
 
   environment.systemPackages = [ pkgs.k9s ];
 
-  # TODO change these if config.services.k3s.role is "agent"!
-  networking.firewall.allowedTCPPorts = [
+  networking.firewall.allowedTCPPorts = lib.optionals (config.services.k3s.role == "server") [
     6443 # k3s: required so that pods can reach the API server (running on port 6443 by default)
     2379 # k3s, etcd clients: required if using a "High Availability Embedded etcd" configuration
     2380 # k3s, etcd peers: required if using a "High Availability Embedded etcd" configuration
@@ -18,12 +18,6 @@
   networking.firewall.allowedUDPPorts = [
     8472 # k3s, flannel: required if using multi-node for inter-node networking
   ];
-
-  # TODO is there something like this for the k3s containerd?
-  # https://rook.io/docs/rook/latest-release/Getting-Started/Prerequisites/prerequisites/?h=nix#nixos
-  # systemd.services.containerd.serviceConfig = {
-  # LimitNOFILE = lib.mkForce null;
-  # };
 
   # NOTE: this enables us to use USB devices for rook/ceph, as they are ignored otherwise.
   # Switches all disk devices marked as "usb" to "scsi", which rook/ceph does not ignore.
