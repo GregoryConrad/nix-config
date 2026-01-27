@@ -5,16 +5,7 @@
   ...
 }:
 {
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
-
   nixpkgs.hostPlatform = "aarch64-darwin";
-
-  nix.gc.automatic = true;
-  nix.linux-builder.enable = true;
-  nix.linux-builder.config.virtualisation.cores = 8;
 
   environment.shells = [ pkgs.fish ];
   programs.fish.enable = true;

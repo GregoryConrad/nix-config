@@ -6,18 +6,15 @@
 ## Overview
 This repo is managed at the top level via `flake.nix`, which defines configuration for:
 - My personal MacBook Pro
-- My work MacBook Pro (requires a special `work-extras.nix`)
 - `optimus`, an old Optiplex 9020 that I picked up some years ago
 - `rpi4`, a Raspberry Pi 4 Model B
 - `rpi5`, a Raspberry Pi 5
-
-The two MBPs are configured via [nix-darwin].
 
 ### Building and Deploying
 ```bash
 # Rebuild local system
 sudo nixos-rebuild switch --flake .#HOSTNAME
-sudo darwin-rebuild switch --flake .#HOSTNAME # --impure if needed
+sudo darwin-rebuild switch --flake .#HOSTNAME
 
 # Deploy to hosts (via ./deploy/default.nix)
 nix run .#deploy-rs -- .#HOSTNAME

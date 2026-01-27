@@ -28,37 +28,32 @@
       nixos-raspberrypi,
     }:
     let
-      systems = [
-        "aarch64-darwin"
-        "aarch64-linux"
-        "x86_64-linux"
-      ];
-      mkFlakeOutput = f: nixpkgs.lib.genAttrs systems f;
-
-      # NOTE: used by ./home/git.nix
+      # NOTE: a special arg used by ./home/git.nix
       git = {
         settings = {
           user.name = "Gregory Conrad";
           user.email = "gregorysconrad@gmail.com";
         };
       };
-
-      mkHomeManagerModule = specialArgs: homeManagerModules: {
-        home-manager.useGlobalPkgs = true;
-        home-manager.useUserPackages = true;
-        home-manager.extraSpecialArgs = specialArgs // {
-          inherit git;
-        };
-        home-manager.users.${specialArgs.username} = nixpkgs.lib.mkMerge homeManagerModules;
-      };
     in
     {
-      formatter = mkFlakeOutput (system: nixpkgs.legacyPackages.${system}.nixfmt-tree);
-      apps = mkFlakeOutput (system: {
+      lib = {
+        mkFlakeOutput = f: nixpkgs.lib.genAttrs nixpkgs.lib.systems.flakeExposed f;
+
+        mkHomeManagerModule = specialArgs: homeManagerModules: {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.extraSpecialArgs = specialArgs;
+          home-manager.users.${specialArgs.username} = nixpkgs.lib.mkMerge homeManagerModules;
+        };
+      };
+
+      formatter = self.lib.mkFlakeOutput (system: nixpkgs.legacyPackages.${system}.nixfmt-tree);
+      apps = self.lib.mkFlakeOutput (system: {
         deploy-rs = deploy-rs.apps.${system}.deploy-rs;
       });
       deploy = import ./deploy inputs;
-      devShells = mkFlakeOutput (
+      devShells = self.lib.mkFlakeOutput (
         system:
         let
           pkgs = nixpkgs.legacyPackages.${system};
@@ -83,44 +78,20 @@
           username = "gconrad";
           hostname = "Groog-MBP";
           specialArgs = inputs // {
-            inherit username hostname;
+            inherit username hostname git;
           };
         in
         nix-darwin.lib.darwinSystem {
           inherit specialArgs;
           modules = [
             ./modules/darwin-common.nix
+            ./modules/darwin-nix.nix
             ./hosts/Groog-MBP.nix
             home-manager.darwinModules.home-manager
-            (mkHomeManagerModule specialArgs [
+            (self.lib.mkHomeManagerModule specialArgs [
               (import ./home)
               (import ./home/personal.nix)
             ])
-          ];
-        };
-
-      darwinConfigurations.Greg-Work-MBP =
-        let
-          username = "greg";
-          hostname = "Greg-Work-MBP";
-          specialArgs = inputs // {
-            inherit username hostname;
-          };
-          workExtrasPath = "/Users/greg/Documents/work-darwin-config.nix";
-        in
-        nix-darwin.lib.darwinSystem {
-          inherit specialArgs;
-          modules = [
-            ./modules/darwin-common.nix
-            ./hosts/Greg-Work-MBP.nix
-            home-manager.darwinModules.home-manager
-            (mkHomeManagerModule specialArgs [ (import ./home) ])
-
-            # NOTE: this out-of-repo import is what requires impure.
-            # Frankly too much effort to do this a "proper" way, like:
-            # - A private git repo, that is added as a git submodule
-            # - Via secret management (never looked into this enough)
-            (if builtins.pathExists workExtrasPath then import workExtrasPath else { })
           ];
         };
 
@@ -132,7 +103,7 @@
             nodeIP = "100.64.0.1";
           };
           specialArgs = inputs // {
-            inherit username hostname k3sConfig;
+            inherit username hostname git k3sConfig;
           };
         in
         nixpkgs.lib.nixosSystem {
@@ -145,7 +116,7 @@
             ./modules/k8s/leader.nix
             ./hosts/optimus
             home-manager.nixosModules.home-manager
-            (mkHomeManagerModule specialArgs [ (import ./home) ])
+            (self.lib.mkHomeManagerModule specialArgs [ (import ./home) ])
           ];
         };
 
