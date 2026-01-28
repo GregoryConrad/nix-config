@@ -103,7 +103,12 @@
             nodeIP = "100.64.0.1";
           };
           specialArgs = inputs // {
-            inherit username hostname git k3sConfig;
+            inherit
+              username
+              hostname
+              git
+              k3sConfig
+              ;
           };
         in
         nixpkgs.lib.nixosSystem {

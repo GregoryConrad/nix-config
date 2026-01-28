@@ -9,7 +9,7 @@
     raspberry-pi-5.base
     raspberry-pi-5.display-vc4
     raspberry-pi-5.page-size-16k
-    # ./nvme.nix # TODO do we need this?
+    ./nvme.nix
   ];
 
   # For https://github.com/k3s-io/k3s/issues/2067
