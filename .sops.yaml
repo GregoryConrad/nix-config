@@ -2,7 +2,7 @@ keys:
   - &personal-mbp age1f36mqstu7qyy29l36jwfdc6zqfxa6a3x543ly8025wk74gnstehqa7zdp8
   - &optimus age10w6h0zkf6wxu8pgjpgct45syuxh642t7u6xw6fkv284tdamn0asspjy2tz
   - &rpi4 age1ea37m49zg2elyft478qkhce4ca9y8fccd62amc043kjl5f0f84xq70g7zy
-  - &rpi5 age1qrhmndeqddcp7cjrhjvu84nc9vhczfjamje5kgyeqzguekcsd9ms572jmu
+  - &rpi5 age1a4dsm6vg0qcl4jknktrvtvkva2z2dyjmm7guu8gsuxmnc5mw6q8sd335fp
 creation_rules:
   - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
     key_groups:
