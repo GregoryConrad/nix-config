@@ -1,14 +1,10 @@
 { config, pkgs, ... }:
 let
-  immichTag = "v2.4.1";
-  # TODO use 18.1-1.0.0 below once immich supports it (probs in next release)
-  immichPostgresImage = "ghcr.io/tensorchord/cloudnative-vectorchord:18.0-0.5.3";
-
+  immichTag = "v2.5.0";
+  immichPostgresImage = "ghcr.io/tensorchord/cloudnative-vectorchord:18.1-1.0.0";
   immichLibraryPvcName = "immich-library-pvc"; # WARN: DO NOT CHANGE!!
-
-  # NOTE: we can increase sizes, but not shrink
-  immichLibraryPvcSize = "1Gi";
-  immichPostgresDbSize = "8Gi";
+  immichLibraryPvcSize = "4Gi"; # WARN: increase only; do not decrease!
+  immichPostgresDbSize = "4Gi"; # WARN: increase only; do not decrease!
 in
 {
   services.k3s = {
