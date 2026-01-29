@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 let
-  immichTag = "v2.5.0";
+  immichTag = "v2.5.2";
   immichPostgresImage = "ghcr.io/tensorchord/cloudnative-vectorchord:18.1-1.0.0";
   immichLibraryPvcName = "immich-library-pvc"; # WARN: DO NOT CHANGE!!
   immichLibraryPvcSize = "4Gi"; # WARN: increase only; do not decrease!
