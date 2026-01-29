@@ -6,10 +6,25 @@ on:
       - master
 
 jobs:
-  deploy-x64:
-    runs-on: ubuntu-latest
+  deploy:
     permissions:
       id-token: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - hostname: optimus
+            arch: x86_64
+          - hostname: rpi5
+            arch: aarch64
+          # TODO uncomment once we setup rpi4 with new sd card
+          # - hostname: rpi4
+          #   arch: aarch64
+    runs-on: >-
+      ${{
+        (matrix.arch == 'aarch64' && 'ubuntu-24.04-arm') ||
+        (matrix.arch == 'x86_64' && 'ubuntu-latest')
+      }}
     steps:
       - uses: actions/checkout@v5
       - uses: cachix/install-nix-action@v31
@@ -22,7 +37,7 @@ jobs:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:ci
-          ping: optimus
+          ping: ${{ matrix.hostname }}
       - name: SSH setup
         run: |
           mkdir -p ~/.ssh
@@ -31,34 +46,6 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
 
-          ssh-keyscan -H optimus >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ matrix.hostname }} >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
-      - run: nix run .#deploy-rs -- --targets .#optimus
-  deploy-arm:
-    runs-on: ubuntu-24.04-arm
-    permissions:
-      id-token: write
-    steps:
-      - uses: actions/checkout@v5
-      - uses: cachix/install-nix-action@v31
-        with:
-          # NOTE: hack fix for https://github.com/serokell/deploy-rs/issues/355
-          install_url: https://releases.nixos.org/nix/nix-2.32.4/install
-      - uses: DeterminateSystems/magic-nix-cache-action@main
-      - uses: tailscale/github-action@v4
-        with:
-          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
-          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
-          tags: tag:ci
-          ping: rpi5,rpi4
-      - name: SSH setup
-        run: |
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-
-          ssh-keyscan -H rpi5 rpi4 >> ~/.ssh/known_hosts
-          chmod 644 ~/.ssh/known_hosts
-      - run: nix run .#deploy-rs -- --targets .#rpi5 .#rpi4
+      - run: nix run .#deploy-rs -- .#${{ matrix.hostname }}
