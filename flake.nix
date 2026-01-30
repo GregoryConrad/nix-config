@@ -132,7 +132,7 @@
           hostname = "rpi5";
           k3sConfig = {
             nodeIP = "100.64.0.2";
-            serverAddr = "https://100.64.0.1:6443";
+            serverAddr = "https://${self.nixosConfigurations.optimus.config.services.k3s.nodeIP}:6443";
           };
           specialArgs = inputs // {
             inherit username hostname k3sConfig;
@@ -156,7 +156,7 @@
           hostname = "rpi4";
           k3sConfig = {
             nodeIP = "100.64.0.3";
-            serverAddr = "https://100.64.0.1:6443";
+            serverAddr = "https://${self.nixosConfigurations.optimus.config.services.k3s.nodeIP}:6443";
           };
           specialArgs = inputs // {
             inherit username hostname k3sConfig;

@@ -94,7 +94,6 @@ in
                   name = "optimus";
                   devices = [
                     { name = "/dev/disk/by-id/usb-Kingston_DTR30G2_0018F30C07F6BE90D1C175C7-0:0"; }
-                    { name = "/dev/disk/by-id/usb-SanDisk_Cruzer_Glide_4C530001280721116240-0:0"; }
                   ];
                 }
                 {
@@ -112,7 +111,7 @@ in
               ];
             };
 
-            # NOTE: if/when we replace rpi4 with more powerful hardware, delete the below.
+            # NOTE: if/when we get more powerful hardware, delete the below.
             resources.osd.requests.memory = "2Gi"; # default is 4Gi
             resources.osd.limits.memory = "2Gi"; # default is 4Gi
           };
