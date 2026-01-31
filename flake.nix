@@ -101,6 +101,7 @@
           hostname = "optimus";
           k3sConfig = {
             nodeIP = "100.64.0.1";
+            clusterInit = true;
           };
           specialArgs = inputs // {
             inherit
@@ -118,7 +119,7 @@
             ./modules/nixos-common.nix
             ./modules/management.nix
             ./modules/k8s
-            ./modules/k8s/leader.nix
+            ./modules/k8s/deployer.nix
             ./hosts/optimus
             home-manager.nixosModules.home-manager
             (self.lib.mkHomeManagerModule specialArgs [ (import ./home) ])

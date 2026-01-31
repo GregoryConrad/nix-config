@@ -1,3 +1,5 @@
+# NOTE: only one node in the cluster should be given this module.
+# See: https://docs.k3s.io/installation/packaged-components#user-addons
 { config, pkgs, ... }:
 let
   immichTag = "v2.5.2";
@@ -8,8 +10,6 @@ let
 in
 {
   services.k3s = {
-    clusterInit = true;
-
     autoDeployCharts = {
       rook-ceph = {
         # https://rook.io/docs/rook/latest-release/Helm-Charts/operator-chart/
@@ -70,6 +70,7 @@ in
         createNamespace = true;
         values = {
           # https://github.com/rook/rook/blob/master/deploy/charts/rook-ceph-cluster/values.yaml
+          toolbox.enabled = true;
           cephClusterSpec = {
             dataDirHostPath = "/var/lib/rook";
             network.provider = "host";
