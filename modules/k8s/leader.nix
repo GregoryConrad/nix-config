@@ -3,8 +3,8 @@ let
   immichTag = "v2.5.2";
   immichPostgresImage = "ghcr.io/tensorchord/cloudnative-vectorchord:18.1-1.0.0";
   immichLibraryPvcName = "immich-library-pvc"; # WARN: DO NOT CHANGE!!
-  immichLibraryPvcSize = "4Gi"; # WARN: increase only; do not decrease!
-  immichPostgresDbSize = "4Gi"; # WARN: increase only; do not decrease!
+  immichLibraryPvcSize = "16Gi"; # WARN: increase only; do not decrease!
+  immichPostgresDbSize = "2Gi"; # WARN: increase only; do not decrease!
 in
 {
   services.k3s = {
@@ -177,7 +177,7 @@ in
         createNamespace = true;
         values = {
           # https://github.com/cloudnative-pg/charts/blob/main/charts/cluster/values.yaml
-          cluster.instances = 1;
+          cluster.instances = 3;
           cluster.imageName = immichPostgresImage;
           cluster.storage.size = immichPostgresDbSize;
           cluster.storage.storageClass = "ceph-block";

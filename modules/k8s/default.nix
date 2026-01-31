@@ -35,14 +35,8 @@
   };
 
   services.k3s = k3sConfig // {
-    enable = false; # TODO re-enable later once we sort disks out
+    enable = true;
     disable = [ "local-storage" ]; # we are using Rook/Ceph instead
     tokenFile = config.sops.secrets.k3sToken.path;
-
-    # TODO do we need these?
-    # extraFlags = [
-    #   "--etcd-arg --election-timeout=5000" # default is 1000ms
-    #   "--etcd-arg --heartbeat-interval=500" # default is 100ms
-    # ];
   };
 }
