@@ -7,6 +7,7 @@ let
   immichLibraryPvcName = "immich-library-pvc"; # WARN: DO NOT CHANGE!!
   immichLibraryPvcSize = "16Gi"; # WARN: increase only; do not decrease!
   immichPostgresDbSize = "2Gi"; # WARN: increase only; do not decrease!
+  tailscaleIngressProxiesName = "ingress-proxies";
 in
 {
   services.k3s = {
@@ -127,6 +128,7 @@ in
           # https://rook.io/docs/rook/latest/Storage-Configuration/Monitoring/ceph-dashboard/
           ingress.dashboard = {
             ingressClassName = "tailscale";
+            annotations."tailscale.com/proxy-group" = tailscaleIngressProxiesName;
             host.name = "ceph-dashboard";
             tls = [ { hosts = [ "ceph-dashboard" ]; } ];
           };
@@ -144,6 +146,7 @@ in
           ingress = {
             enabled = true;
             ingressClassName = "tailscale";
+            annotations."tailscale.com/proxy-group" = tailscaleIngressProxiesName;
             tls = [ { hosts = [ "headlamp" ]; } ];
             hosts = [
               {
@@ -212,6 +215,7 @@ in
           server.ingress.main = {
             enabled = true;
             className = "tailscale";
+            annotations."tailscale.com/proxy-group" = tailscaleIngressProxiesName;
             tls = [ { hosts = [ "immich" ]; } ];
             hosts = [
               {
@@ -231,6 +235,14 @@ in
         targetNamespace = "tailscale";
         createNamespace = true;
       };
+    };
+
+    manifests.tailscale-ingress-proxies.content = {
+      apiVersion = "tailscale.com/v1alpha1";
+      kind = "ProxyGroup";
+      metadata.name = tailscaleIngressProxiesName;
+      metadata.namespace = "tailscale";
+      spec.type = "ingress";
     };
 
     manifests.immich-pvc.content = {
