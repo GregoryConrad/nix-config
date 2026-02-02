@@ -27,9 +27,6 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - uses: cachix/install-nix-action@v31
-        with:
-          # NOTE: hack fix for https://github.com/serokell/deploy-rs/issues/355
-          install_url: https://releases.nixos.org/nix/nix-2.32.4/install
       - uses: DeterminateSystems/magic-nix-cache-action@main
       - uses: tailscale/github-action@v4
         with:
