@@ -5,16 +5,40 @@
 }:
 {
   imports = [
-    ./hardware-configuration.nix
+    ./disks.nix
   ];
 
+  nixpkgs.hostPlatform = "x86_64-linux";
+  hardware.enableRedistributableFirmware = true;
+  hardware.cpu.intel.updateMicrocode = true;
+
+  boot.kernelModules = [ "kvm-intel" ];
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.initrd.availableKernelModules = [
+    "xhci_pci"
+    "ehci_pci"
+    "ahci"
+    "usb_storage"
+    "sd_mod"
+    "sr_mod"
+  ];
 
   services.immich = {
     enable = true;
     host = "0.0.0.0";
     openFirewall = true;
+  };
+
+  users.users.${username} = {
+    isNormalUser = true;
+    description = username;
+    shell = pkgs.fish;
+    extraGroups = [
+      "wheel"
+      "networkmanager"
+    ];
+    openssh.authorizedKeys.keyFiles = [ ../../deploy/authorized_keys.pub ];
   };
 
   time.timeZone = "America/New_York";
@@ -31,22 +55,7 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  users.users.${username} = {
-    isNormalUser = true;
-    description = username;
-    shell = pkgs.fish;
-    extraGroups = [
-      "wheel"
-      "networkmanager"
-    ];
-    openssh.authorizedKeys.keyFiles = [ ../../deploy/authorized_keys.pub ];
-  };
-
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "24.05";
+  # WARN: see the following before changing:
+  # https://search.nixos.org/options?channel=unstable&show=system.stateVersion&query=system.stateVersion
+  system.stateVersion = "26.05";
 }
