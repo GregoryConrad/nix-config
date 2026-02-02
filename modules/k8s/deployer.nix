@@ -95,12 +95,13 @@ in
                   name = "optimus";
                   devices = [
                     { name = "/dev/disk/by-id/usb-Kingston_DTR30G2_0018F30C07F6BE90D1C175C7-0:0"; }
+                    { name = "/dev/disk/by-id/usb-SanDisk_Cruzer_Glide_20044527100F1DA226F5-0:0"; }
                   ];
                 }
                 {
                   name = "rpi5";
                   devices = [
-                    { name = "/dev/disk/by-id/usb-SanDisk_Cruzer_Glide_20044527100F1DA226F5-0:0"; }
+                    { name = "/dev/disk/by-id/nvme-CT2000P310SSD8_254554493560"; }
                   ];
                 }
                 {
