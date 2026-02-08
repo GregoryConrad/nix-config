@@ -13,12 +13,6 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  services.immich = {
-    enable = true;
-    host = "0.0.0.0";
-    openFirewall = true;
-  };
-
   users.users.${username} = {
     isNormalUser = true;
     description = username;
