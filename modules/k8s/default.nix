@@ -35,7 +35,7 @@
   };
 
   services.k3s = k3sConfig // {
-    enable = false;
+    enable = true;
     disable = [ "local-storage" ]; # we are using Rook/Ceph instead
     tokenFile = config.sops.secrets.k3sToken.path;
   };
