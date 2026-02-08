@@ -7,6 +7,8 @@
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    disko.url = "github:nix-community/disko/latest";
+    disko.inputs.nixpkgs.follows = "nixpkgs";
     deploy-rs.url = "github:serokell/deploy-rs";
     deploy-rs.inputs.nixpkgs.follows = "nixpkgs";
     sops-nix.url = "github:Mic92/sops-nix";
@@ -23,6 +25,7 @@
       nixpkgs,
       nix-darwin,
       home-manager,
+      disko,
       deploy-rs,
       sops-nix,
       nixos-raspberrypi,
@@ -95,6 +98,7 @@
           ];
         };
 
+      imageScripts.optimus = self.nixosConfigurations.optimus.config.system.build.diskoImagesScript;
       nixosConfigurations.optimus =
         let
           username = "gconrad";
