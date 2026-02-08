@@ -7,7 +7,7 @@
   # https://github.com/nix-community/disko/blob/master/docs/disko-images.md
   disko.devices = {
     disk.main = {
-      device = "/dev/disk/by-id/TODO_THE_SATA_SSD";
+      device = "/dev/disk/by-id/ata-X12_SSD_128GB_KT202010001529HC";
       type = "disk";
       imageSize = "8G"; # WARN: must be big enough to contain full OS
       content = {
