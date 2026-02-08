@@ -15,8 +15,8 @@ in
         # https://rook.io/docs/rook/latest-release/Helm-Charts/operator-chart/
         name = "rook-ceph";
         repo = "https://charts.rook.io/release";
-        version = "1.19.0";
-        hash = "sha256-19gssKTaz95vpv1T1I6nCVgXqjniBgYNjRejM0QRxfI=";
+        version = "1.19.1";
+        hash = "sha256-yndD6gxtoeOegD9TFUdepN9lPk+LyBp289NPQdoplS0=";
         targetNamespace = "rook-ceph";
         createNamespace = true;
         values = {
@@ -64,8 +64,8 @@ in
         # https://rook.io/docs/rook/latest-release/Helm-Charts/ceph-cluster-chart/
         name = "rook-ceph-cluster";
         repo = "https://charts.rook.io/release";
-        version = "1.19.0";
-        hash = "sha256-/xExUHHiS9QeFxuZS+TJ1+SFHctC0Fl/YdTgSjaDYgs=";
+        version = "1.19.1";
+        hash = "sha256-YAkvhgx6hssA+vngwCduDMEAf3AtNBwlsncWbYhA960=";
         targetNamespace = "rook-ceph";
         createNamespace = true;
         values = {
@@ -136,8 +136,8 @@ in
         # https://github.com/kubernetes-sigs/headlamp/tree/main/charts/headlamp
         name = "headlamp";
         repo = "https://kubernetes-sigs.github.io/headlamp";
-        version = "0.39.0";
-        hash = "sha256-OPeQSVR170wcxLgojTAi2LwY5Qq2MLoS4NbmJQHPE1M=";
+        version = "0.40.0";
+        hash = "sha256-NR52Ylj8Sr9ZrdGi5OpSQGhJFs9rjlXmAoLIwOlhBTw=";
         targetNamespace = "kube-system";
         createNamespace = true;
         values = {
@@ -163,8 +163,8 @@ in
         # https://github.com/cloudnative-pg/charts/tree/main/charts/cloudnative-pg
         name = "cloudnative-pg";
         repo = "https://cloudnative-pg.github.io/charts";
-        version = "0.27.0";
-        hash = "sha256-ObGgzQzGuWT4VvuMgZzFiI8U+YX/JM868lZpZnrFBGw=";
+        version = "0.27.1";
+        hash = "sha256-Z9cYn5MhnTVWMP92kBaRIc9gbmeshKvgXFP4h4jenUk=";
         targetNamespace = "cnpg-system";
         createNamespace = true;
       };
