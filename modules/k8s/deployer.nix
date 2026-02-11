@@ -112,9 +112,17 @@ in
               ];
             };
 
-            # NOTE: if/when we get more powerful hardware, delete the below.
-            resources.osd.requests.memory = "2Gi"; # default is 4Gi
-            resources.osd.limits.memory = "2Gi"; # default is 4Gi
+            # NOTE: the default CPU requests for these are a little high.
+            # Given we are dealing with some raspberry pis, which only have 4 cores,
+            # disable the CPU requests entirely.
+            resources.mgr.requests.cpu = null;
+            resources.mon.requests.cpu = null;
+            resources.osd.requests.cpu = null;
+            resources.cleanup.requests.cpu = null;
+
+            # NOTE: if/when rpi4 is swapped with something with more RAM, delete the below.
+            resources.mon.requests.memory = "512Mi"; # default is 1Gi
+            resources.osd.requests.memory = "1Gi"; # default is 4Gi
           };
 
           # NOTE: we are disabling the default CephFilesystem + CephObjectStore
