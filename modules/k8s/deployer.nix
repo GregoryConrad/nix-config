@@ -2,7 +2,7 @@
 # See: https://docs.k3s.io/installation/packaged-components#user-addons
 { config, pkgs, ... }:
 let
-  immichTag = "v2.5.5";
+  immichTag = "v2.5.6";
   immichPostgresImage = "ghcr.io/tensorchord/cloudnative-vectorchord:18.1-1.0.0";
   immichLibraryPvcName = "immich-library-pvc"; # WARN: DO NOT CHANGE!!
   immichLibraryPvcSize = "100Gi"; # WARN: increase only; do not decrease!
