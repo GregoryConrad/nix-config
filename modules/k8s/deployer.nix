@@ -6,7 +6,7 @@ let
   immichPostgresImage = "ghcr.io/tensorchord/cloudnative-vectorchord:18.1-1.0.0";
   immichLibraryPvcName = "immich-library-pvc"; # WARN: DO NOT CHANGE!!
   immichLibraryPvcSize = "100Gi"; # WARN: increase only; do not decrease!
-  immichPostgresDbSize = "2Gi"; # WARN: increase only; do not decrease!
+  immichPostgresDbSize = "3Gi"; # WARN: increase only; do not decrease!
 in
 {
   services.k3s = {
