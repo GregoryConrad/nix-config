@@ -6,7 +6,7 @@ let
   immichPostgresImage = "ghcr.io/tensorchord/cloudnative-vectorchord:18.1-1.0.0";
   immichLibraryPvcName = "immich-library-pvc"; # WARN: DO NOT CHANGE!!
   immichLibraryPvcSize = "100Gi"; # WARN: increase only; do not decrease!
-  immichPostgresDbSize = "3Gi"; # WARN: increase only; do not decrease!
+  immichPostgresDbSize = "4Gi"; # WARN: increase only; do not decrease!
 in
 {
   services.k3s = {
@@ -22,6 +22,11 @@ in
         values = {
           # https://github.com/rook/rook/blob/master/deploy/charts/rook-ceph/values.yaml
           enableDiscoveryDaemon = true; # for "Physical Disks" in Ceph dashboard
+
+          # We aren't using CephFS right now, so disable the CephFS CSI driver to save on resources
+          # NOTE: this isn't actually working right now; https://github.com/rook/rook/issues/17070
+          csi.enableCephfsDriver = false;
+          # csi.disableCsiDriver = true;
 
           # https://rook.io/docs/rook/latest-release/Getting-Started/Prerequisites/prerequisites/?h=nix#nixos
           csi.csiRBDPluginVolume = [
@@ -121,8 +126,9 @@ in
             resources.cleanup.requests.cpu = null;
 
             # NOTE: if/when rpi4 is swapped with something with more RAM, delete the below.
-            resources.mon.requests.memory = "512Mi"; # default is 1Gi
-            resources.osd.requests.memory = "1Gi"; # default is 4Gi
+            resources.mgr.requests.memory = "0Mi"; # default is 512Mi
+            resources.mon.requests.memory = "0Mi"; # default is 1Gi
+            resources.osd.requests.memory = "0Mi"; # default is 4Gi
           };
 
           # NOTE: we are disabling the default CephFilesystem + CephObjectStore
