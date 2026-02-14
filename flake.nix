@@ -1,6 +1,11 @@
 {
   description = "Gregory Conrad's Configuration of Everything";
 
+  nixConfig = {
+    extra-substituters = [ "https://gregoryconrad-nix-config.cachix.org" ];
+    extra-trusted-public-keys = [ "gregoryconrad-nix-config.cachix.org-1:Q6KV2EXusXFMUHB+kumMEOcq9Y5S4JxTdr0mPeA0ofY=" ];
+  };
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nix-darwin.url = "github:nix-darwin/nix-darwin/master";
