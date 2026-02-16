@@ -13,6 +13,10 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # For Tailscale Peer Relay: https://tailscale.com/docs/features/peer-relay
+  services.tailscale.extraSetFlags = [ "--relay-server-port=44321" ];
+  networking.firewall.allowedUDPPorts = [ 44321 ];
+
   users.users.${username} = {
     isNormalUser = true;
     description = username;

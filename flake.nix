@@ -3,7 +3,9 @@
 
   nixConfig = {
     extra-substituters = [ "https://gregoryconrad-nix-config.cachix.org" ];
-    extra-trusted-public-keys = [ "gregoryconrad-nix-config.cachix.org-1:Q6KV2EXusXFMUHB+kumMEOcq9Y5S4JxTdr0mPeA0ofY=" ];
+    extra-trusted-public-keys = [
+      "gregoryconrad-nix-config.cachix.org-1:Q6KV2EXusXFMUHB+kumMEOcq9Y5S4JxTdr0mPeA0ofY="
+    ];
   };
 
   inputs = {
