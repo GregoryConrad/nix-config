@@ -22,11 +22,7 @@ in
         values = {
           # https://github.com/rook/rook/blob/master/deploy/charts/rook-ceph/values.yaml
           enableDiscoveryDaemon = true; # for "Physical Disks" in Ceph dashboard
-
-          # We aren't using CephFS right now, so disable the CephFS CSI driver to save on resources
-          # NOTE: this isn't actually working right now; https://github.com/rook/rook/issues/17070
-          csi.enableCephfsDriver = false;
-          # csi.disableCsiDriver = true;
+          csi.enableCephfsDriver = false; # not using CephFS right now, so save on some resources
 
           # https://rook.io/docs/rook/latest-release/Getting-Started/Prerequisites/prerequisites/?h=nix#nixos
           csi.csiRBDPluginVolume = [
