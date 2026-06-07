@@ -45,4 +45,4 @@ jobs:
 
           ssh-keyscan -H ${{ matrix.hostname }} >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
-      - run: nix run .#deploy-rs -- .#${{ matrix.hostname }}
+      - run: nix run .#deploy-rs -- .#${{ matrix.hostname }} --boot
