@@ -22,7 +22,7 @@
   homebrew = {
     enable = true;
     casks = [
-      "unnaturalscrollwheels"
+      "linearmouse"
       "vlc"
       "wezterm"
     ];
