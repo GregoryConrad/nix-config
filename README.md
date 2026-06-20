@@ -7,8 +7,8 @@
 This repo is managed at the top level via `flake.nix`, which defines configuration for:
 - My personal MacBook Pro
 - `optimus`, an old Optiplex 9020 that I picked up some years ago
-- `rpi4`, a Raspberry Pi 4 Model B
-- `rpi5`, a Raspberry Pi 5
+- `rpi5`, a Raspberry Pi 5 (16 GB RAM)
+- `octopi`, a Raspberry Pi 5 (8 GB RAM)
 
 ### Building and Deploying
 ```bash
@@ -27,10 +27,8 @@ Since I'm bound to forget how to set everything up on macOS, here's the TL;DR:
 1. Install Nix via https://github.com/NixOS/nix-installer
 2. Setup nix-darwin:
 ```zsh
-sudo mkdir -p /etc/nix-darwin
-sudo chown $(id -nu):$(id -ng) /etc/nix-darwin
-cd /etc/nix-darwin
-git clone git@github.com:GregoryConrad/nix-config.git .
+git clone git@github.com:GregoryConrad/nix-config.git
+cd nix-config
 sudo nix run nix-darwin/master#darwin-rebuild -- switch --flake .#HOSTNAME
 ```
 

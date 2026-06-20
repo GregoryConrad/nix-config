@@ -159,11 +159,11 @@
           ];
         };
 
-      images.rpi4 = self.nixosConfigurations.rpi4.config.system.build.sdImage;
-      nixosConfigurations.rpi4 =
+      images.octopi = self.nixosConfigurations.octopi.config.system.build.sdImage;
+      nixosConfigurations.octopi =
         let
           username = "gconrad";
-          hostname = "rpi4";
+          hostname = "octopi";
           k3sConfig = {
             nodeIP = "100.64.0.3";
             serverAddr = "https://${self.nixosConfigurations.optimus.config.services.k3s.nodeIP}:6443";
@@ -179,7 +179,7 @@
             ./modules/nixos-common.nix
             ./modules/management.nix
             ./modules/k8s
-            ./hosts/rpi4
+            ./hosts/octopi
           ];
         };
     };

@@ -22,7 +22,7 @@ in
         values = {
           # https://github.com/rook/rook/blob/master/deploy/charts/rook-ceph/values.yaml
           enableDiscoveryDaemon = true; # for "Physical Disks" in Ceph dashboard
-          csi.enableCephfsDriver = false; # not using CephFS right now, so save on some resources
+          csi.enableCephfsDriver = false; # NOTE: not using CephFS right now; save on some resources
 
           # https://rook.io/docs/rook/latest-release/Getting-Started/Prerequisites/prerequisites/?h=nix#nixos
           csi.csiRBDPluginVolume = [
@@ -105,7 +105,7 @@ in
                   ];
                 }
                 {
-                  name = "rpi4";
+                  name = "octopi";
                   devices = [
                     { name = "/dev/disk/by-id/usb-Seagate_Backup+_Mac_SL_NA5P7VX5-0:0"; }
                   ];
@@ -120,11 +120,6 @@ in
             resources.mon.requests.cpu = null;
             resources.osd.requests.cpu = null;
             resources.cleanup.requests.cpu = null;
-
-            # NOTE: if/when rpi4 is swapped with something with more RAM, delete the below.
-            resources.mgr.requests.memory = "0Mi"; # default is 512Mi
-            resources.mon.requests.memory = "0Mi"; # default is 1Gi
-            resources.osd.requests.memory = "0Mi"; # default is 4Gi
           };
 
           # NOTE: we are disabling the default CephFilesystem + CephObjectStore
