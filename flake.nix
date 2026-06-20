@@ -20,9 +20,7 @@
     deploy-rs.inputs.nixpkgs.follows = "nixpkgs";
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
-    # TODO once #131 makes its way to `main` in a new release:
-    # nixos-raspberrypi.url = "github:nvmd/nixos-raspberrypi/main";
-    nixos-raspberrypi.url = "github:nvmd/nixos-raspberrypi/develop";
+    nixos-raspberrypi.url = "github:nvmd/nixos-raspberrypi/main";
     nixos-raspberrypi.inputs.nixpkgs.follows = "nixpkgs";
   };
 
