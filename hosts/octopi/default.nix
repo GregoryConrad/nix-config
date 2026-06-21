@@ -6,8 +6,9 @@
 }:
 {
   imports = with nixos-raspberrypi.nixosModules; [
-    raspberry-pi-4.base
-    raspberry-pi-4.display-vc4
+    raspberry-pi-5.base
+    raspberry-pi-5.display-vc4
+    raspberry-pi-5.page-size-16k
   ];
 
   # For https://github.com/k3s-io/k3s/issues/2067
@@ -15,6 +16,8 @@
     "cgroup_enable=cpuset"
     "cgroup_enable=memory"
   ];
+
+  boot.loader.raspberry-pi.bootloader = "kernel";
 
   time.timeZone = "America/New_York";
 

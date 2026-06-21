@@ -15,7 +15,7 @@ jobs:
             arch: x86_64
           - hostname: rpi5
             arch: aarch64
-          - hostname: rpi4
+          - hostname: octopi
             arch: aarch64
     runs-on: >-
       ${{
