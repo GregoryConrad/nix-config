@@ -2,7 +2,7 @@
 # See: https://docs.k3s.io/installation/packaged-components#user-addons
 { config, pkgs, ... }:
 let
-  immichTag = "v2.7.5";
+  immichTag = "v3.1.0";
   immichPostgresImage = "ghcr.io/tensorchord/cloudnative-vectorchord:18.3-1.1.1";
   immichLibraryPvcName = "immich-library-pvc"; # WARN: DO NOT CHANGE!!
   immichLibraryPvcSize = "100Gi"; # WARN: increase only; do not decrease!
@@ -15,8 +15,8 @@ in
         # https://rook.io/docs/rook/latest-release/Helm-Charts/operator-chart/
         name = "rook-ceph";
         repo = "https://charts.rook.io/release";
-        version = "1.20.1";
-        hash = "sha256-65fg+IPaLaMXo/4i5sWFpS1otfgh0M6aiL0F+10lXrs=";
+        version = "1.20.4";
+        hash = "sha256-VhwiCdC1cZwCh/d8fGO5FBvKSmOv5kS7ryF0MprOAfI=";
         targetNamespace = "rook-ceph";
         createNamespace = true;
         values = {
@@ -65,8 +65,8 @@ in
         # https://rook.io/docs/rook/latest-release/Helm-Charts/ceph-cluster-chart/
         name = "rook-ceph-cluster";
         repo = "https://charts.rook.io/release";
-        version = "1.20.1";
-        hash = "sha256-08mCsMPhDegk9cHsTiiL0AQAlD4+HbezgjuMDf5tJzM=";
+        version = "1.20.4";
+        hash = "sha256-3J6hqABWoEVPx+aed+v0SuMY9G26JuNAb+/F45TdTzA=";
         targetNamespace = "rook-ceph";
         createNamespace = true;
         values = {
@@ -141,8 +141,8 @@ in
         # https://github.com/kubernetes-sigs/headlamp/tree/main/charts/headlamp
         name = "headlamp";
         repo = "https://kubernetes-sigs.github.io/headlamp";
-        version = "0.43.0";
-        hash = "sha256-amuBAphMB98x2ADCfg6o/JHHZjZrp/zcL/QROwOumnU=";
+        version = "0.44.0";
+        hash = "sha256-Auo/ATHMjsAtZH3/U4Aur49+jZQoz3tcRkhIY1LVf4U=";
         targetNamespace = "kube-system";
         createNamespace = true;
         values = {
@@ -168,8 +168,8 @@ in
         # https://github.com/cloudnative-pg/charts/tree/main/charts/cloudnative-pg
         name = "cloudnative-pg";
         repo = "https://cloudnative-pg.github.io/charts";
-        version = "0.28.3";
-        hash = "sha256-oiDxdLcmN/UFVTucD92wuf7QM4DVi+Fxk1zZnYgId9Y=";
+        version = "0.29.0";
+        hash = "sha256-Zo4GX/U1CNWCOHiP01s1WpJQYIQ2KalR3w5qk2Lm0y8=";
         targetNamespace = "cnpg-system";
         createNamespace = true;
       };
@@ -177,8 +177,8 @@ in
         # https://github.com/cloudnative-pg/charts/tree/main/charts/cluster
         name = "cluster";
         repo = "https://cloudnative-pg.github.io/charts";
-        version = "0.7.0";
-        hash = "sha256-AEl53dz134xeNYn6bMV05MTkxr/6wSOFSZCM8hucK18=";
+        version = "0.8.1";
+        hash = "sha256-xDh1M+ZlgaKT6iWSg3pkXgC+jC/MFsFSDB93WzzOHX4=";
         targetNamespace = "immich";
         createNamespace = true;
         values = {
@@ -198,9 +198,9 @@ in
       immich = {
         # https://github.com/immich-app/immich-charts
         name = "immich";
-        repo = "https://immich-app.github.io/immich-charts";
-        version = "0.12.0";
-        hash = "sha256-ci+4BJs5VBLy8hVaYD2Ear2hD5Y9WgYYUUFhoYDaEUg=";
+        repo = "oci://ghcr.io/immich-app/immich-charts/immich";
+        version = "0.13.1";
+        hash = "sha256-3yweC+LQ5/54bnqrLyFMiyE5TbeE8SnpU2pzM+bIFno=";
         targetNamespace = "immich";
         createNamespace = true;
         values = {
@@ -231,8 +231,8 @@ in
         # https://github.com/tailscale/tailscale/tree/main/cmd/k8s-operator/deploy
         name = "tailscale-operator";
         repo = "https://pkgs.tailscale.com/helmcharts";
-        version = "1.98.3";
-        hash = "sha256-p0E+sM6RWB/2b8caF9oM8Zoagi7XqE+0tSeGzrFwZaA=";
+        version = "1.102.2";
+        hash = "sha256-FAWqw4t1rgYVgjR3Y7PTXZg4THpqZgn6i02B8EqGGHo=";
         targetNamespace = "tailscale";
         createNamespace = true;
       };
